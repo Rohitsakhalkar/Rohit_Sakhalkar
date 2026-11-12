@@ -136,7 +136,7 @@ export default function Terminal() {
         {/* Terminal body */}
         <div
           ref={outputRef}
-          className="bg-zinc-950 p-4 min-h-[220px] max-h-[420px] overflow-y-auto space-y-1 cursor-text sm:min-h-[280px]"
+          className="bg-zinc-950 p-4 min-h-55 max-h-105 overflow-y-auto space-y-1 cursor-text sm:min-h-70"
           role="log"
           aria-label="Portfolio terminal output"
           aria-live="polite"
@@ -145,7 +145,7 @@ export default function Terminal() {
           {lines.map((line, i) => (
             <div
               key={i}
-              className={`break-words ${
+              className={`wrap-break-word ${
                 line.type === "input"
                   ? "text-emerald-400"
                   : line.type === "error"

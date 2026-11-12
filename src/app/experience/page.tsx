@@ -3,9 +3,9 @@ import LocationHeader from "@/components/LocationHeader";
 import { experience } from "@/lib/data";
 
 export const metadata = {
-  title: "Career Archives | Rohit Sakhalkar",
+  title: "Experience | Rohit Sakhalkar",
   description:
-    "Rohit's verified internship and separate project-based automation work.",
+    "Rohit's internship and separate project-based automation work.",
 };
 
 export default function ExperiencePage() {
@@ -13,12 +13,12 @@ export default function ExperiencePage() {
     <div className="location-scene mx-auto max-w-5xl px-5 py-10 sm:px-8 sm:py-14">
       <LocationHeader
         sector="03 / 05"
-        name="Career Archives"
+        name="Experience"
         title="Experience record"
-        description="Professional internship and project-based work are kept separate. Open an archive entry to see the details."
+        description="Professional internship experience and project-based work are listed separately."
       />
 
-      <div className="relative space-y-5 before:absolute before:bottom-5 before:left-[7px] before:top-5 before:w-px before:bg-zinc-800">
+      <div className="relative space-y-5 before:absolute before:bottom-5 before:left-1.75] before:top-5 before:w-px before:bg-zinc-800">
         <section className="relative pl-7">
           <span
             aria-hidden="true"
@@ -30,7 +30,7 @@ export default function ExperiencePage() {
           >
             <summary className="cursor-pointer list-none p-5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-400 sm:p-6 [&::-webkit-details-marker]:hidden">
               <span className="font-mono text-[10px] uppercase tracking-wider text-emerald-400">
-                Verified internship
+                Internship
               </span>
               <span className="mt-2 flex flex-wrap items-start justify-between gap-3">
                 <span>
@@ -46,10 +46,10 @@ export default function ExperiencePage() {
                 </span>
               </span>
               <span className="mt-4 block font-mono text-[10px] text-zinc-600 group-open:hidden">
-                OPEN ARCHIVE +
+                SHOW DETAILS +
               </span>
               <span className="mt-4 hidden font-mono text-[10px] text-zinc-600 group-open:block">
-                CLOSE ARCHIVE −
+                HIDE DETAILS −
               </span>
             </summary>
             <div className="border-t border-zinc-800 px-5 py-5 sm:px-6">
@@ -96,7 +96,7 @@ export default function ExperiencePage() {
         href="/projects"
         className="mt-7 inline-flex min-h-11 items-center gap-2 rounded-lg border border-zinc-700 px-4 py-2.5 text-sm text-zinc-300 hover:border-emerald-800 hover:text-emerald-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-400"
       >
-        Explore project dossiers <span aria-hidden="true">→</span>
+        View related projects <span aria-hidden="true">→</span>
       </Link>
     </div>
   );

@@ -1,23 +1,24 @@
-# ROHIT.EXE
+# ROHIT.EXE — Portfolio
 
-An interactive, game-inspired portfolio world for Rohit Sakhalkar. The visual
-navigation gives each part of the portfolio its own location while keeping
-projects, experience, skills, education, and contact information available as
-regular, crawlable pages.
+A responsive portfolio for Rohit Sakhalkar, with restrained ROHIT.EXE branding
+and game-inspired visual details. Projects, skills, experience, education, and
+contact remain straightforward, accessible pages.
 
-## World locations
+## Portfolio
 
-- **Project District** — project cards, filters, source links, and project
-  dossiers with implementation status.
-- **Engineering Lab** — interactive skill modules linked to relevant work.
-- **Career Archives** — verified internship and separately labeled
-  project-based work.
-- **Knowledge Vault** — education and engineering interests.
-- **Communication Hub** — direct contact links and the EmailJS message flow.
-- **Spawn Point** — profile, project entry point, and the world map.
+- **Projects** — four curated projects lead in a fixed order, followed by
+  public repositories fetched from GitHub. Search, technology, category, and
+  status filters work together with sorting. The GitHub catalog is cached for
+  one hour; if GitHub is unavailable, the curated projects remain available.
+- **Skills** — technologies are grouped and linked to relevant project work;
+  no proficiency scores are implied.
+- **Experience** — internship experience is kept separate from project-based
+  work.
+- **About** — background, education, and engineering interests.
+- **Contact** — direct links and an EmailJS message form.
 
-The simulated developer console is available from every page. It accepts
-portfolio commands only and never executes operating-system commands.
+The simulated developer console accepts portfolio commands only and never
+executes operating-system commands.
 
 ## Tech stack
 
@@ -33,10 +34,11 @@ CSS and respect reduced-motion preferences.
 
 ```text
 src/
-  app/                 Spawn point, world locations, project dossiers, metadata
-  components/          World navigation, project cards, console, contact form
-  lib/data.ts          Portfolio content, projects, and world locations
+  app/                 Portfolio pages, project details, and metadata
+  components/          Navigation, project catalog, console, and contact form
+  lib/                 Curated content, GitHub catalog, and shared types
 public/                Static assets and the ROHIT.EXE mark
+tests/                 Project catalog tests
 ```
 
 ## Requirements
@@ -84,6 +86,7 @@ unconfigured and provides a direct email link.
 npm run dev
 npm run lint
 npx tsc --noEmit
+npm run test:projects
 npm run build
 npm run start
 ```

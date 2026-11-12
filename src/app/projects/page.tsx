@@ -1,10 +1,12 @@
-import ProjectCard from "@/components/ProjectCard";
+import { Suspense } from "react";
 import LocationHeader from "@/components/LocationHeader";
+import ProjectBrowser from "@/components/ProjectBrowser";
+import { getProjectCatalog } from "@/lib/projects";
 
 export const metadata = {
-  title: "Project District | Rohit Sakhalkar",
+  title: "Projects | Rohit Sakhalkar",
   description:
-    "Explore Rohit's Python backend, automation, and data structures projects.",
+    "Explore four featured projects and Rohit's other public GitHub repositories.",
 };
 
 export default function ProjectsPage() {
@@ -12,19 +14,48 @@ export default function ProjectsPage() {
     <div className="location-scene mx-auto max-w-7xl px-5 py-10 sm:px-8 sm:py-14">
       <LocationHeader
         sector="01 / 05"
-        name="Project District"
-        title="Project dossiers"
-        description="A field guide to the backend system, Python automation toolkit, and data structures package I’ve been working on. Select a dossier for its scope, status, and technical details."
+        name="Projects"
+        title="Selected projects and repositories"
+        description="Four selected projects lead, followed by public GitHub repositories. Search and combine technology, category, and status filters, then choose a sort order."
       />
-      <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
-        <p className="font-mono text-[10px] uppercase tracking-wider text-zinc-500">
-          Repository index / three projects
-        </p>
-        <p className="font-mono text-[10px] uppercase tracking-wider text-amber-300">
-          Get It Done / currently building
-        </p>
-      </div>
-      <ProjectCard />
+      <Suspense fallback={<ProjectBrowserFallback />}>
+        <ProjectCatalogSection />
+      </Suspense>
     </div>
+  );
+}
+
+async function ProjectCatalogSection() {
+  const { projects, error } = await getProjectCatalog();
+  return <ProjectBrowser projects={projects} error={error} />;
+}
+
+function ProjectBrowserFallback() {
+  return (
+    <section
+      aria-busy="true"
+      aria-label="Loading project collection"
+      className="space-y-5"
+    >
+      <p role="status" className="font-mono text-xs text-zinc-400">
+        Loading project index from GitHub...
+      </p>
+      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        {Array.from({ length: 4 }, (_, index) => (
+          <div
+            key={index}
+            className="h-20 animate-pulse rounded-lg border border-zinc-800 bg-[#101720] motion-reduce:animate-none"
+          />
+        ))}
+      </div>
+      <div className="grid gap-4 lg:grid-cols-2">
+        {Array.from({ length: 4 }, (_, index) => (
+          <div
+            key={index}
+            className="h-64 animate-pulse rounded-xl border border-zinc-800 bg-[#101720] motion-reduce:animate-none"
+          />
+        ))}
+      </div>
+    </section>
   );
 }

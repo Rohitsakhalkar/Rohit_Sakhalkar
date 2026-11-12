@@ -1,8 +1,9 @@
 import Link from "next/link";
 import QuickProfile from "@/components/QuickProfile";
-import { personal, projects, worldLocations } from "@/lib/data";
+import { personal, worldLocations } from "@/lib/data";
+import { curatedProjects } from "@/lib/curated-projects";
 
-const featuredProject = projects[0];
+const featuredProject = curatedProjects[0];
 
 export default function Home() {
   return (
@@ -15,7 +16,7 @@ export default function Home() {
               System online
             </p>
             <p className="font-mono text-xs uppercase tracking-[0.18em] text-zinc-400">
-              Welcome, explorer.
+              Software developer portfolio
             </p>
             <h1 className="mt-3 text-4xl font-semibold leading-tight tracking-tight text-zinc-50 sm:text-5xl lg:text-6xl">
               I’m {personal.name}.
@@ -29,10 +30,10 @@ export default function Home() {
             </p>
             <div className="mt-7 flex flex-wrap gap-3">
               <Link
-                href="#world-map"
+                href="/projects"
                 className="inline-flex min-h-11 items-center gap-2 rounded-lg bg-emerald-500 px-4 py-2.5 text-sm font-semibold text-[#07100d] transition-colors hover:bg-emerald-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-300"
               >
-                Enter world <span aria-hidden="true">→</span>
+                View projects <span aria-hidden="true">→</span>
               </Link>
               <QuickProfile />
             </div>
@@ -68,7 +69,7 @@ export default function Home() {
               <div className="gate-ring gate-ring-inner" aria-hidden="true" />
               <div className="gate-core" aria-hidden="true">
                 <span>ROHIT.EXE</span>
-                <span>SPAWN POINT</span>
+                <span>PORTFOLIO</span>
               </div>
               <div className="gate-floor" aria-hidden="true" />
             </div>
@@ -77,23 +78,23 @@ export default function Home() {
               className="relative order-1 block rounded-xl border border-emerald-900/70 bg-[#0b1118]/90 p-5 transition-colors hover:border-emerald-600 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emerald-400 sm:order-2"
             >
               <div className="mb-5 flex items-center justify-between gap-2 font-mono text-[10px] uppercase tracking-wider">
-                <span className="text-emerald-400">Signal / Project District</span>
+                <span className="text-emerald-400">Featured project</span>
                 <span className="rounded-full border border-amber-900/70 px-2 py-1 text-amber-300">
                   In progress
                 </span>
               </div>
               <p className="font-mono text-[10px] uppercase tracking-wider text-zinc-500">
-                Featured dossier
+                Selected project
               </p>
               <h2 className="mt-2 text-xl font-semibold text-zinc-100">
-                {featuredProject.title}
+                {featuredProject.name}
               </h2>
               <p className="mt-2 text-sm leading-6 text-zinc-400">
                 A social and freelancing platform connecting people who need
                 small tasks completed with people who can help.
               </p>
               <div className="mt-4 flex flex-wrap gap-1.5">
-                {featuredProject.tags.slice(0, 4).map((tag) => (
+                {featuredProject.technologies.slice(0, 4).map((tag) => (
                   <span
                     key={tag}
                     className="rounded border border-zinc-800 px-2 py-1 font-mono text-[10px] text-zinc-400"
@@ -103,41 +104,41 @@ export default function Home() {
                 ))}
               </div>
               <span className="mt-5 inline-flex text-xs text-emerald-300">
-                Open project dossier <span aria-hidden="true" className="ml-2">↗</span>
+                View project details <span aria-hidden="true" className="ml-2">↗</span>
               </span>
             </Link>
           </div>
         </div>
         <p className="pointer-events-none absolute bottom-4 right-5 hidden font-mono text-[10px] uppercase tracking-wider text-zinc-700 sm:block">
-          Spawn point / ROHIT.EXE
+          ROHIT.EXE / Portfolio
         </p>
       </section>
 
       <section
-        id="world-map"
+        id="portfolio-sections"
         className="world-map-section scroll-mt-20 px-5 py-14 sm:px-8 sm:py-16"
       >
         <div className="mx-auto max-w-7xl">
           <div className="flex flex-wrap items-end justify-between gap-4">
             <div>
               <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-emerald-400">
-                World navigation
+                Portfolio navigation
               </p>
               <h2 className="mt-2 text-2xl font-semibold tracking-tight text-zinc-100 sm:text-3xl">
-                Choose a destination
+                Explore the portfolio
               </h2>
               <p className="mt-2 max-w-xl text-sm leading-6 text-zinc-400">
-                Each zone opens a regular, keyboard-accessible page. No gameplay
-                is required to reach the portfolio details.
+                Use these links to open projects, skills, experience, about,
+                and contact details directly.
               </p>
             </div>
             <p className="font-mono text-[10px] uppercase tracking-wider text-zinc-600">
-              Five locations / one explorer
+              Five sections / one profile
             </p>
           </div>
 
           <nav
-            aria-label="World destinations"
+            aria-label="Portfolio sections"
             className="mt-7 grid gap-3 sm:grid-cols-2 lg:grid-cols-3"
           >
             {worldLocations.map((location) => (
@@ -161,15 +162,14 @@ export default function Home() {
                   </p>
                 </div>
                 <span className="absolute bottom-5 right-5 text-sm text-zinc-600 transition-colors group-hover:text-emerald-300">
-                  <span className="sr-only">Enter {location.name}</span>
+                  <span className="sr-only">Open {location.label}</span>
                   <span aria-hidden="true">↗</span>
                 </span>
               </Link>
             ))}
           </nav>
           <p className="mt-6 font-mono text-[10px] text-zinc-600">
-            TIP / Open the developer console from any location with the control
-            at the bottom of the screen.
+            Developer console: open Menu on mobile or use the dock on desktop.
           </p>
         </div>
       </section>

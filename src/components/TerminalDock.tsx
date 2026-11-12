@@ -12,12 +12,22 @@ export default function TerminalDock() {
     if (open && dialog && !dialog.open) dialog.showModal();
   }, [open]);
 
+  useEffect(() => {
+    function openTerminal() {
+      setOpen(true);
+    }
+
+    window.addEventListener("open-developer-console", openTerminal);
+    return () =>
+      window.removeEventListener("open-developer-console", openTerminal);
+  }, []);
+
   return (
     <>
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="fixed bottom-16 right-3 z-40 min-h-10 rounded-lg border border-emerald-900 bg-[#101720] px-3 font-mono text-xs text-emerald-300 shadow-lg transition-colors hover:border-emerald-600 hover:bg-[#151e29] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-400 sm:right-5 lg:bottom-5"
+        className="fixed bottom-16 right-3 z-40 hidden min-h-10 rounded-lg border border-emerald-900 bg-[#101720] px-3 font-mono text-xs text-emerald-300 shadow-lg transition-colors hover:border-emerald-600 hover:bg-[#151e29] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-400 lg:inline-flex lg:bottom-5 lg:right-5"
         aria-haspopup="dialog"
       >
         <span aria-hidden="true">&gt;_ </span>Developer console

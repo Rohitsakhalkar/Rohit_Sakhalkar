@@ -20,10 +20,10 @@ export default function LocationHeader({
           {sector} <span className="mx-1 text-zinc-700">·</span> {name}
         </p>
         <Link
-          href="/#world-map"
+          href="/#portfolio-sections"
           className="text-zinc-400 transition-colors hover:text-emerald-300 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emerald-400"
         >
-          Return to world <span aria-hidden="true">↗</span>
+          Back to portfolio <span aria-hidden="true">↗</span>
         </Link>
       </div>
       <h1 className="mt-4 text-3xl font-semibold tracking-tight text-zinc-50 sm:text-4xl">

@@ -3,7 +3,7 @@ import LocationHeader from "@/components/LocationHeader";
 import { education, personal } from "@/lib/data";
 
 export const metadata = {
-  title: "Knowledge Vault | Rohit Sakhalkar",
+  title: "About | Rohit Sakhalkar",
   description:
     "Rohit's education, engineering interests, and approach to backend and automation projects.",
 };
@@ -20,15 +20,15 @@ export default function AboutPage() {
     <div className="location-scene mx-auto max-w-6xl px-5 py-10 sm:px-8 sm:py-14">
       <LocationHeader
         sector="04 / 05"
-        name="Knowledge Vault"
+        name="About"
         title="Background and engineering interests"
-        description="A concise profile beyond the project dossiers: the problems I’m interested in and the way I approach building software."
+        description="A concise profile beyond the project details: the problems I’m interested in and the way I approach building software."
       />
 
       <div className="grid gap-5 lg:grid-cols-[1.3fr_0.7fr]">
         <section className="rounded-xl border border-zinc-800 bg-[#101720] p-5 sm:p-7">
           <p className="font-mono text-[10px] uppercase tracking-wider text-emerald-400">
-            Profile file
+            About me
           </p>
           <h2 className="mt-2 text-xl font-semibold text-zinc-100">
             {personal.name}
@@ -46,7 +46,7 @@ export default function AboutPage() {
 
         <section className="rounded-xl border border-emerald-900/60 bg-[#101720] p-5 sm:p-7">
           <p className="font-mono text-[10px] uppercase tracking-wider text-emerald-400">
-            Education record
+            Education
           </p>
           <h2 className="mt-3 text-lg font-semibold leading-7 text-zinc-100">
             {education.qualification}
@@ -105,7 +105,7 @@ export default function AboutPage() {
           href="/projects"
           className="inline-flex min-h-11 items-center gap-2 rounded-lg border border-emerald-900 px-4 py-2 text-sm text-emerald-300 hover:border-emerald-600 hover:bg-emerald-950/30 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-400"
         >
-          Enter Project District <span aria-hidden="true">→</span>
+          View projects <span aria-hidden="true">→</span>
         </Link>
       </section>
     </div>

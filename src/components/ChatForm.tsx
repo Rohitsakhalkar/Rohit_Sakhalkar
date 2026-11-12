@@ -176,7 +176,7 @@ export default function ChatForm() {
             className={`flex ${bubble.who === "user" ? "justify-end" : "justify-start"}`}
           >
             <p
-              className={`max-w-[88%] break-words rounded-xl px-3 py-2 text-sm leading-6 ${
+              className={`max-w-[88%] wrap-break-word rounded-xl px-3 py-2 text-sm leading-6 ${
                 bubble.who === "form"
                   ? "bg-zinc-800 text-zinc-200"
                   : "bg-emerald-950 text-emerald-100"

@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { projects, skillGroups, technologyNotes } from "@/lib/data";
+import { curatedProjects } from "@/lib/curated-projects";
+import { skillGroups, technologyNotes } from "@/lib/data";
 
 export default function SkillModules() {
   const [selected, setSelected] = useState<string | null>(null);
@@ -17,7 +18,7 @@ export default function SkillModules() {
           <div className="flex flex-wrap items-start justify-between gap-3">
             <div>
               <p className="font-mono text-[10px] uppercase tracking-wider text-emerald-500">
-                Workstation {String(groupIndex + 1).padStart(2, "0")}
+                Skill group {String(groupIndex + 1).padStart(2, "0")}
               </p>
               <h2 className="mt-1 text-lg font-semibold text-zinc-100">
                 {group.name}
@@ -27,7 +28,7 @@ export default function SkillModules() {
               </p>
             </div>
             <span aria-hidden="true" className="font-mono text-xs text-zinc-600">
-              {String(group.technologies.length).padStart(2, "0")} modules
+              {String(group.technologies.length).padStart(2, "0")} technologies
             </span>
           </div>
 
@@ -38,11 +39,11 @@ export default function SkillModules() {
               const panelId = `skill-${groupIndex}-${technology
                 .toLowerCase()
                 .replace(/[^a-z0-9]+/g, "-")}`;
-              const relatedProjects = projects.filter((project) => {
+              const relatedProjects = curatedProjects.filter((project) => {
                 const searchable = [
-                  ...project.tags,
-                  ...project.focus,
+                  ...project.technologies,
                   project.description,
+                  ...project.dossier.implemented,
                 ]
                   .join(" ")
                   .toLowerCase();
@@ -88,7 +89,7 @@ export default function SkillModules() {
                                 href={`/projects/${project.slug}`}
                                 className="text-xs text-emerald-300 underline decoration-emerald-900 underline-offset-4 hover:text-emerald-200"
                               >
-                                {project.title}
+                                {project.name}
                               </Link>
                             </li>
                           ))}

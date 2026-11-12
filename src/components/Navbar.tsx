@@ -18,7 +18,7 @@ export default function Navbar() {
       <Link
         key={location.id}
         href={location.path}
-        aria-label={location.name}
+        aria-label={location.label}
         title={location.name}
         aria-current={isActive(location.path) ? "page" : undefined}
         onClick={() => setMenuOpen(false)}
@@ -40,7 +40,7 @@ export default function Navbar() {
     <>
       <a
         href="#main-content"
-        className="sr-only z-[60] rounded bg-zinc-100 px-4 py-2 text-zinc-950 focus:not-sr-only focus:fixed focus:left-4 focus:top-4"
+        className="sr-only z-60 rounded bg-zinc-100 px-4 py-2 text-zinc-950 focus:not-sr-only focus:fixed focus:left-4 focus:top-4"
       >
         Skip to content
       </a>
@@ -48,7 +48,7 @@ export default function Navbar() {
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
           <Link
             href="/"
-            aria-label="ROHIT.EXE spawn point"
+            aria-label="Rohit Sakhalkar home"
             className="shrink-0 font-mono text-sm font-bold tracking-tight text-zinc-100 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emerald-400"
           >
             ROHIT<span className="text-emerald-400">.EXE</span>
@@ -60,7 +60,7 @@ export default function Navbar() {
           </p>
 
           <nav
-            aria-label="World locations"
+            aria-label="Portfolio navigation"
             className="hidden items-center gap-0.5 lg:flex"
           >
             {worldLocations.map((location) => locationLink(location))}
@@ -92,7 +92,7 @@ export default function Navbar() {
             aria-controls="world-menu"
             onClick={() => setMenuOpen((open) => !open)}
           >
-            {menuOpen ? "Close" : "Zones"}
+            {menuOpen ? "Close" : "Menu"}
             <span aria-hidden="true">{menuOpen ? "×" : "⌄"}</span>
           </button>
         </div>
@@ -100,13 +100,27 @@ export default function Navbar() {
         {menuOpen && (
           <nav
             id="world-menu"
-            aria-label="World destinations"
+            aria-label="Portfolio menu"
             className="border-t border-zinc-800 bg-[#080b10] px-4 py-3 sm:px-6 lg:hidden"
           >
             <div className="mx-auto grid max-w-7xl gap-1 sm:grid-cols-2">
               {worldLocations.map((location) =>
                 locationLink(location, true)
               )}
+              <button
+                type="button"
+                aria-haspopup="dialog"
+                onClick={() => {
+                  window.dispatchEvent(new Event("open-developer-console"));
+                  setMenuOpen(false);
+                }}
+                className="flex min-h-11 items-center gap-3 rounded-md px-3 text-left text-sm text-emerald-300 hover:bg-zinc-900 hover:text-emerald-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-400"
+              >
+                <span aria-hidden="true" className="font-mono text-[10px]">
+                  &gt;_
+                </span>
+                Developer console
+              </button>
               <a
                 href={personal.github}
                 target="_blank"
@@ -129,14 +143,14 @@ export default function Navbar() {
       </header>
 
       <nav
-        aria-label="Mobile world locations"
+        aria-label="Mobile section navigation"
         className="fixed inset-x-0 bottom-0 z-50 grid grid-cols-5 border-t border-zinc-800 bg-[#080b10]/95 px-1 pb-[env(safe-area-inset-bottom)] pt-1 backdrop-blur lg:hidden"
       >
         {worldLocations.map((location) => (
           <Link
             key={location.id}
             href={location.path}
-            aria-label={location.name}
+            aria-label={location.label}
             aria-current={isActive(location.path) ? "page" : undefined}
             className={`flex min-h-12 flex-col items-center justify-center gap-0.5 rounded px-1 text-[10px] leading-tight transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-400 ${
               isActive(location.path)

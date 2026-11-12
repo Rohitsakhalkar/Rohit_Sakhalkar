@@ -3,7 +3,7 @@ import LocationHeader from "@/components/LocationHeader";
 import { personal } from "@/lib/data";
 
 export const metadata = {
-  title: "Communication Hub | Rohit Sakhalkar",
+  title: "Contact | Rohit Sakhalkar",
   description:
     "Contact Rohit Sakhalkar through email, GitHub, LinkedIn, or the EmailJS message form.",
 };
@@ -13,9 +13,9 @@ export default function ContactPage() {
     <div className="location-scene mx-auto max-w-6xl px-5 py-10 sm:px-8 sm:py-14">
       <LocationHeader
         sector="05 / 05"
-        name="Communication Hub"
-        title="Open a communication channel"
-        description="Reach out about a project, opportunity, or technology conversation. Choose a direct link or use the message console."
+        name="Contact"
+        title="Get in touch"
+        description="For a project, opportunity, or technology conversation, contact me directly or use the message form."
       />
 
       <div className="grid gap-5 lg:grid-cols-[0.8fr_1.2fr]">
@@ -69,14 +69,14 @@ export default function ContactPage() {
 
         <section className="rounded-xl border border-emerald-900/50 bg-[#101720] p-5 sm:p-6">
           <p className="font-mono text-[10px] uppercase tracking-wider text-emerald-400">
-            Message console / EmailJS
+            Email form
           </p>
           <h2 className="mt-2 text-lg font-semibold text-zinc-100">
             Send a message
           </h2>
           <p className="mt-1 text-sm leading-6 text-zinc-400">
-            Answer a few short prompts. Your message is only confirmed after
-            EmailJS reports success.
+            Complete a few short prompts. A confirmation appears after EmailJS
+            reports successful delivery.
           </p>
           <div className="mt-5">
             <ChatForm />

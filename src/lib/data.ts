@@ -20,7 +20,7 @@ export const commands: Record<string, string | string[]> = {
   help: [
     "Available commands:",
     "  whoami      → introduction",
-    "  about       → Knowledge Vault",
+    "  about       → about and education",
     "  skills      → technical toolkit",
     "  projects    → selected work",
     "  experience  → internship and project work",
@@ -34,11 +34,11 @@ export const commands: Record<string, string | string[]> = {
     "I enjoy turning ideas into working software and building practical developer tools.",
   ],
   about: [
-    "Knowledge Vault: background, engineering interests, and education.",
+    "About: A developer in the making, with a dream to become someone who turns ideas into meaningful products, solves real-world problems, and never stops learning.",
   ],
   education: [
     "Bachelor of Computer Applications (BCA)",
-    "KLES Gogte College of Commerce · Rani Channamma University · CGPA 8.1",
+    "KLS Gogte College of Commerce · Rani Channamma University · CGPA 8.1",
   ],
   skills: [
     "─── Backend ─────",
@@ -59,128 +59,6 @@ export const commands: Record<string, string | string[]> = {
   github: ["→ Opening GitHub in a new tab..."],
   clear: [],
 };
-
-export const projects = [
-  {
-    id: "get_it_done",
-    slug: "get-it-done",
-    title: "Get It Done",
-    category: "Backend",
-    status: "In progress",
-    description:
-      "A social and freelancing platform that brings community interaction and real gigs together. The project is in progress.",
-    tags: ["Python", "FastAPI", "SQLAlchemy", "SQLite", "REST APIs", "pytest"],
-    focus: [
-      "Connect people who need small tasks done with people who can do them",
-      "FastAPI REST API with SQLAlchemy and SQLite",
-      "pytest coverage for backend behavior",
-    ],
-    dossier: {
-      problem:
-        "Connect people who need small tasks completed with people who can do them, while bringing social interaction into the same platform.",
-      architecture:
-        "A FastAPI backend organized around user, post, capability, follow, and task routes, with SQLAlchemy persistence and SQLite for development and tests.",
-      implemented: [
-        "User signup, login, and profile updates",
-        "Posts, feeds, and user post routes",
-        "Capability and follow/unfollow routes",
-        "Task creation, reading, updates, and location-filtered listings",
-      ],
-      inProgress: [
-        "The broader task lifecycle. The current API supports task creation and updates; the full assigned, started, completed, and cancellation flow is not yet exposed.",
-      ],
-      planned: [
-        "Separate direct and task-related messaging",
-        "Moderation workflows",
-        "Cancellation that requires agreement from both parties",
-      ],
-      testing:
-        "pytest tests cover users, posts, follows, capabilities, login, and task behavior, including invalid task input.",
-      notes: [],
-    },
-    github: "https://github.com/Rohitsakhalkar/get_it_done",
-    live: "",
-    featured: true,
-  },
-  {
-    id: "forge",
-    slug: "forge",
-    title: "Forge",
-    category: "Automation",
-    status: "V1 built · evolving",
-    description:
-      "A modular Python CLI toolkit for managing development environments, package operations, application launching, and file management.",
-    tags: ["Python", "CLI", "pathlib", "subprocess", "venv", "JSON"],
-    focus: [
-      "Create virtual environments and manage packages",
-      "File operations and application management",
-      "Modular CLI with JSON-based application persistence",
-    ],
-    dossier: {
-      problem:
-        "Bring common development and system operations into one Python command-line toolkit.",
-      architecture:
-        "A modular CLI connects Python environment management, file operations, application management, scanning, and a lightweight JSON data layer.",
-      implemented: [
-        "Create virtual environments and install, upgrade, and uninstall packages",
-        "Create, remove, copy, rename, and inspect files and directories",
-        "Launch registered applications and scan executable paths",
-        "Persist application and executable data in JSON",
-      ],
-      inProgress: [],
-      planned: [],
-      testing: "",
-      notes: [
-        "The repository describes Forge as experimental and still evolving. It is primarily Windows-oriented, and application paths can be machine-specific.",
-      ],
-    },
-    github: "https://github.com/Rohitsakhalkar/forge",
-    live: "",
-    featured: true,
-  },
-  {
-    id: "datastructure",
-    slug: "data-structures",
-    title: "Data Structures Package",
-    category: "Fundamentals",
-    status: "Built",
-    description:
-      "From-scratch implementations of fundamental data structures with pytest coverage for edge cases, traversal operations, and boundary conditions.",
-    tags: [
-      "Python",
-      "Stack",
-      "Queue",
-      "Linked Lists",
-      "Binary Search Tree",
-      "pytest",
-    ],
-    focus: [
-      "From-scratch data structure implementations",
-      "Traversal and boundary-condition coverage",
-      "pytest",
-    ],
-    dossier: {
-      problem:
-        "Practice fundamental data structures through independent Python implementations and automated tests.",
-      architecture:
-        "A Python package organizes core data structures as reusable implementations with pytest coverage.",
-      implemented: [
-        "Stack",
-        "Queue",
-        "Singly linked list",
-        "Doubly linked list",
-        "Binary search tree",
-      ],
-      inProgress: [],
-      planned: [],
-      testing: "pytest tests cover edge cases and traversal behavior.",
-      notes: [],
-    },
-    github: "https://github.com/Rohitsakhalkar/datastructures",
-    live: "",
-    featured: true,
-  },
-];
 
 export const skillGroups = [
   {
@@ -266,40 +144,40 @@ export const experience = {
 export const worldLocations = [
   {
     id: "01",
-    name: "Project District",
-    label: "Work",
+    name: "Projects",
+    label: "Projects",
     path: "/projects",
     description: "Explore the software and tools I’ve been building.",
     coordinates: "01 / 05",
   },
   {
     id: "02",
-    name: "Engineering Lab",
-    label: "Lab",
+    name: "Skills",
+    label: "Skills",
     path: "/skills",
     description: "Browse the technologies behind my project work.",
     coordinates: "02 / 05",
   },
   {
     id: "03",
-    name: "Career Archives",
-    label: "Career",
+    name: "Experience",
+    label: "Experience",
     path: "/experience",
     description: "See my internship and project-based experience.",
     coordinates: "03 / 05",
   },
   {
     id: "04",
-    name: "Knowledge Vault",
-    label: "Vault",
+    name: "Education",
+    label: "Education",
     path: "/about",
     description: "Learn about my background, education, and approach.",
     coordinates: "04 / 05",
   },
   {
     id: "05",
-    name: "Communication Hub",
-    label: "Comms",
+    name: "Contact",
+    label: "Contact",
     path: "/contact",
     description: "Find my contact links and send a message.",
     coordinates: "05 / 05",
@@ -324,7 +202,7 @@ export const technologyNotes: Record<string, string> = {
   JSON: "Used by Forge for local application and executable data.",
   JavaScript: "Used in frontend development and interactive web interfaces.",
   React: "Used in this portfolio's interactive interface.",
-  Nextjs: "Used to build this portfolio's pages and routes.",
+  "Next.js": "Used to build this portfolio's pages and routes.",
   TypeScript: "Used for the portfolio's React components and route data.",
   "Tailwind CSS": "Used to style this responsive portfolio.",
   HTML: "Used to structure this portfolio's pages.",
