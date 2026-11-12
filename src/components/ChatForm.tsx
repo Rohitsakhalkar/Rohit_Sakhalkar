@@ -1,215 +1,279 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, type FormEvent, type KeyboardEvent } from "react";
 import emailjs from "@emailjs/browser";
+import { personal } from "@/lib/data";
 
-// ─── EmailJS config ────────────────────────────────────────────────────────────
-// 1. Go to https://www.emailjs.com and create a free account
-// 2. Create a service (Gmail) and get your SERVICE_ID
-// 3. Create an email template and get your TEMPLATE_ID
-// 4. Copy your PUBLIC_KEY from Account → API Keys
-// Then put them in .env.local:
-//   NEXT_PUBLIC_EMAILJS_SERVICE_ID=service_xxxxxxx
-//   NEXT_PUBLIC_EMAILJS_TEMPLATE_ID=template_xxxxxxx
-//   NEXT_PUBLIC_EMAILJS_PUBLIC_KEY=xxxxxxxxxxxxxxxxxxxx
 const SERVICE_ID = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID ?? "";
 const TEMPLATE_ID = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID ?? "";
 const PUBLIC_KEY = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY ?? "";
 
 interface Step {
-  botMsg: string;
+  prompt: string;
   field: "name" | "subject" | "message" | "email";
   placeholder: string;
 }
 
 const steps: Step[] = [
+  { prompt: "What’s your name?", field: "name", placeholder: "Your name" },
   {
-    botMsg: "Hey. What's your name?",
-    field: "name",
-    placeholder: "Alex",
-  },
-  {
-    botMsg: "What do you want to talk about?",
+    prompt: "What would you like to talk about?",
     field: "subject",
-    placeholder: "Collab / job / just saying hi",
+    placeholder: "Opportunity, project, or a question",
   },
   {
-    botMsg: "Go ahead — say what you came to say.",
+    prompt: "Write your message.",
     field: "message",
-    placeholder: "I saw your work and...",
+    placeholder: "Your message",
   },
   {
-    botMsg: "Last thing: your email so Rohit can get back to you.",
+    prompt: "What email address can Rohit reply to?",
     field: "email",
     placeholder: "you@example.com",
   },
 ];
 
 type FormData = { name: string; subject: string; message: string; email: string };
+type ChatBubble = { who: "form" | "user"; text: string };
 
-interface ChatBubble {
-  who: "bot" | "user";
-  text: string;
-}
+const initialForm: FormData = { name: "", subject: "", message: "", email: "" };
 
 export default function ChatForm() {
   const [stepIdx, setStepIdx] = useState(0);
-  const [data, setData] = useState<FormData>({ name: "", subject: "", message: "", email: "" });
+  const [data, setData] = useState<FormData>(initialForm);
   const [input, setInput] = useState("");
-  const [chat, setChat] = useState<ChatBubble[]>([]);
+  const [chat, setChat] = useState<ChatBubble[]>([
+    { who: "form", text: steps[0].prompt },
+  ]);
   const [done, setDone] = useState(false);
   const [sending, setSending] = useState(false);
   const [error, setError] = useState("");
-  const inputRef = useRef<HTMLInputElement | HTMLTextAreaElement>(null);
+  const [canRetry, setCanRetry] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
-
-  // Kick off with first bot message
-  useEffect(() => {
-    setChat([{ who: "bot", text: steps[0].botMsg }]);
-  }, []);
+  const sendingRef = useRef(false);
 
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-    setTimeout(() => (inputRef.current as HTMLElement)?.focus(), 100);
+    bottomRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
   }, [chat]);
 
-  const handleSend = async () => {
-    const val = input.trim();
-    if (!val) return;
+  async function sendMessage(message: FormData) {
+    if (sendingRef.current) return;
+    if (!SERVICE_ID || !TEMPLATE_ID || !PUBLIC_KEY) {
+      setError(
+        `The contact form is not configured. Please email ${personal.email} directly.`
+      );
+      setCanRetry(false);
+      return;
+    }
 
-    const step = steps[stepIdx];
-    const newData = { ...data, [step.field]: val };
-    setData(newData);
-    setChat((prev) => [...prev, { who: "user", text: val }]);
-    setInput("");
+    sendingRef.current = true;
+    setSending(true);
+    setError("");
+    setCanRetry(false);
+    setChat((previous) => [...previous, { who: "form", text: "Sending message…" }]);
 
-    const next = stepIdx + 1;
-
-    if (next < steps.length) {
-      setTimeout(() => {
-        setChat((prev) => [...prev, { who: "bot", text: steps[next].botMsg }]);
-        setStepIdx(next);
-      }, 400);
-    } else {
-      // All fields collected → send email
-      setSending(true);
-      setChat((prev) => [
-        ...prev,
-        { who: "bot", text: "Sending..." },
+    try {
+      await emailjs.send(
+        SERVICE_ID,
+        TEMPLATE_ID,
+        {
+          from_name: message.name,
+          from_email: message.email,
+          subject: message.subject,
+          message: message.message,
+          to_email: personal.email,
+        },
+        PUBLIC_KEY
+      );
+      setChat((previous) => [
+        ...previous,
+        { who: "form", text: "Message sent. Thanks for getting in touch." },
       ]);
-      try {
-        await emailjs.send(
-          SERVICE_ID,
-          TEMPLATE_ID,
-          {
-            from_name: newData.name,
-            from_email: newData.email,
-            subject: newData.subject,
-            message: newData.message,
-            to_email: "rohitsakhalkar3@gmail.com",
-          },
-          PUBLIC_KEY
-        );
-        setChat((prev) => [
-          ...prev,
-          {
-            who: "bot",
-            text: `✓ Sent. Rohit will reply at ${newData.email} within 24h.`,
-          },
-        ]);
-        setDone(true);
-      } catch {
-        setError("Something went wrong. Try emailing directly: rohitsakhalkar3@gmail.com");
-        setChat((prev) => [
-          ...prev,
-          { who: "bot", text: "Hmm, that didn't go through. See the error below." },
-        ]);
-      } finally {
-        setSending(false);
+      setDone(true);
+    } catch (submissionError) {
+      console.error("EmailJS contact submission failed", submissionError);
+      setError(
+        `Your message could not be sent. Please try again or email ${personal.email} directly.`
+      );
+      setCanRetry(true);
+      setChat((previous) => [
+        ...previous,
+        { who: "form", text: "The message did not go through." },
+      ]);
+    } finally {
+      sendingRef.current = false;
+      setSending(false);
+    }
+  }
+
+  function handleSend() {
+    const value = input.trim();
+    const step = steps[stepIdx];
+    const activeControl =
+      step.field === "message" ? textareaRef.current : inputRef.current;
+    if (!value) {
+      setError("Please enter a response before continuing.");
+      activeControl?.focus();
+      return;
+    }
+    if (step.field === "email" && inputRef.current) {
+      if (!inputRef.current.checkValidity()) {
+        inputRef.current.reportValidity();
+        return;
       }
     }
-  };
+
+    const nextData = { ...data, [step.field]: value };
+    setData(nextData);
+    setInput("");
+    setError("");
+    setCanRetry(false);
+    setChat((previous) => [...previous, { who: "user", text: value }]);
+
+    const nextStep = stepIdx + 1;
+    if (nextStep < steps.length) {
+      window.setTimeout(() => {
+        setChat((previous) => [
+          ...previous,
+          { who: "form", text: steps[nextStep].prompt },
+        ]);
+        setStepIdx(nextStep);
+      }, 250);
+    } else {
+      void sendMessage(nextData);
+    }
+  }
+
+  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    handleSend();
+  }
+
+  function handleTextareaKeyDown(event: KeyboardEvent<HTMLTextAreaElement>) {
+    if (event.key === "Enter" && !event.shiftKey) {
+      event.preventDefault();
+      handleSend();
+    }
+  }
 
   const isLongField = steps[stepIdx]?.field === "message";
+  const currentStep = steps[stepIdx];
 
   return (
-    <div className="w-full max-w-2xl mx-auto font-mono flex flex-col gap-4">
-      {/* Chat window */}
-      <div className="bg-zinc-950 border border-zinc-800 rounded-lg p-4 min-h-64 max-h-96 overflow-y-auto space-y-3">
-        {chat.map((bubble, i) => (
+    <div className="w-full font-mono">
+      <div
+        className="flex min-h-52 max-h-80 flex-col gap-3 overflow-y-auto rounded-xl border border-zinc-800 bg-[#111113] p-4 sm:min-h-60 sm:p-5"
+        role="log"
+        aria-label="Contact form conversation"
+        aria-live="polite"
+        aria-relevant="additions text"
+      >
+        {chat.map((bubble, index) => (
           <div
-            key={i}
+            key={`${bubble.who}-${index}`}
             className={`flex ${bubble.who === "user" ? "justify-end" : "justify-start"}`}
           >
-            <span
-              className={`inline-block px-3 py-2 rounded-lg text-sm max-w-[80%] ${
-                bubble.who === "bot"
+            <p
+              className={`max-w-[88%] break-words rounded-xl px-3 py-2 text-sm leading-6 ${
+                bubble.who === "form"
                   ? "bg-zinc-800 text-zinc-200"
-                  : "bg-emerald-900 text-emerald-200"
+                  : "bg-emerald-950 text-emerald-100"
               }`}
             >
-              {bubble.who === "bot" && (
-                <span className="text-emerald-500 mr-1">AI</span>
+              {bubble.who === "form" && (
+                <span className="mr-2 font-sans text-[10px] font-semibold uppercase tracking-wider text-emerald-400">
+                  Contact
+                </span>
               )}
               {bubble.text}
-            </span>
+            </p>
           </div>
         ))}
         <div ref={bottomRef} />
       </div>
 
-      {/* Input row */}
       {!done && !sending && (
-        <div className="flex gap-2">
+        <form onSubmit={handleSubmit} className="mt-3 flex items-end gap-2">
           {isLongField ? (
             <textarea
-              ref={inputRef as React.RefObject<HTMLTextAreaElement>}
+              ref={textareaRef}
+              aria-label={currentStep.prompt}
               value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" && !e.shiftKey) {
-                  e.preventDefault();
-                  handleSend();
-                }
-              }}
-              placeholder={steps[stepIdx]?.placeholder}
+              onChange={(event) => setInput(event.target.value)}
+              onKeyDown={handleTextareaKeyDown}
+              placeholder={currentStep.placeholder}
+              required
+              maxLength={5000}
               rows={3}
-              className="flex-1 bg-zinc-900 border border-zinc-700 rounded px-3 py-2 text-sm text-zinc-100 outline-none focus:border-emerald-500 resize-none placeholder:text-zinc-600"
+              className="min-w-0 flex-1 resize-y rounded-lg border border-zinc-700 bg-zinc-900 px-3 py-2.5 text-sm text-zinc-100 outline-none placeholder:text-zinc-600 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
             />
           ) : (
             <input
-              ref={inputRef as React.RefObject<HTMLInputElement>}
+              ref={inputRef}
+              type={currentStep.field === "email" ? "email" : "text"}
+              aria-label={currentStep.prompt}
+              autoComplete={
+                currentStep.field === "name"
+                  ? "name"
+                  : currentStep.field === "email"
+                    ? "email"
+                    : "off"
+              }
               value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && handleSend()}
-              placeholder={steps[stepIdx]?.placeholder}
-              className="flex-1 bg-zinc-900 border border-zinc-700 rounded px-3 py-2 text-sm text-zinc-100 outline-none focus:border-emerald-500 placeholder:text-zinc-600"
+              onChange={(event) => setInput(event.target.value)}
+              placeholder={currentStep.placeholder}
+              required
+              maxLength={currentStep.field === "email" ? 254 : 150}
+              className="min-w-0 flex-1 rounded-lg border border-zinc-700 bg-zinc-900 px-3 py-2.5 text-sm text-zinc-100 outline-none placeholder:text-zinc-600 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
             />
           )}
           <button
-            onClick={handleSend}
-            className="px-4 py-2 bg-emerald-700 hover:bg-emerald-600 text-white rounded text-sm transition-colors"
+            type="submit"
+            className="min-h-11 shrink-0 rounded-lg bg-emerald-500 px-4 py-2 text-sm font-medium text-zinc-950 transition-colors hover:bg-emerald-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-300"
           >
             Send
           </button>
-        </div>
+        </form>
       )}
 
       {error && (
-        <p className="text-red-400 text-xs">{error}</p>
+        <div className="mt-3 flex flex-wrap items-center gap-3">
+          <p role="alert" className="text-sm leading-6 text-red-300">
+            {error}
+          </p>
+          {canRetry && !done && (
+            <button
+              type="button"
+              onClick={() => void sendMessage(data)}
+              className="shrink-0 text-sm text-zinc-200 underline underline-offset-4 hover:text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emerald-400"
+            >
+              Try again
+            </button>
+          )}
+        </div>
+      )}
+
+      {sending && (
+        <p role="status" className="mt-3 text-sm text-zinc-400">
+          Sending your message…
+        </p>
       )}
 
       {done && (
         <button
+          type="button"
           onClick={() => {
-            setChat([{ who: "bot", text: steps[0].botMsg }]);
-            setData({ name: "", subject: "", message: "", email: "" });
+            setChat([{ who: "form", text: steps[0].prompt }]);
+            setData(initialForm);
             setStepIdx(0);
             setInput("");
             setDone(false);
             setError("");
+            setCanRetry(false);
           }}
-          className="text-xs text-zinc-500 hover:text-zinc-300 underline"
+          className="mt-4 text-sm text-zinc-400 underline underline-offset-4 hover:text-zinc-200 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emerald-400"
         >
           Send another message
         </button>

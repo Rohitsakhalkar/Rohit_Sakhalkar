@@ -9,17 +9,18 @@ interface Line {
   text: string;
 }
 
+const commandSuggestions = ["help", "projects", "skills", "experience", "contact"];
+
 export default function Terminal() {
   const [lines, setLines] = useState<Line[]>([]);
   const [input, setInput] = useState("");
   const [booted, setBooted] = useState(false);
   const [history, setHistory] = useState<string[]>([]);
   const [historyIndex, setHistoryIndex] = useState(-1);
-  const bottomRef = useRef<HTMLDivElement>(null);
+  const outputRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
 
-  // Boot sequence — stream lines one by one
   useEffect(() => {
     let i = 0;
     const interval = setInterval(() => {
@@ -29,15 +30,14 @@ export default function Terminal() {
       } else {
         clearInterval(interval);
         setBooted(true);
-        setTimeout(() => inputRef.current?.focus(), 100);
       }
     }, 280);
     return () => clearInterval(interval);
   }, []);
 
-  // Auto-scroll
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+    const output = outputRef.current;
+    if (output) output.scrollTop = output.scrollHeight;
   }, [lines]);
 
   const handleCommand = (raw: string) => {
@@ -54,7 +54,7 @@ export default function Terminal() {
     }
 
     if (cmd === "github") {
-      window.open(personal.github, "_blank");
+      window.open(personal.github, "_blank", "noopener,noreferrer");
       setLines((prev) => [
         ...prev,
         { type: "output", text: "→ Opening GitHub..." },
@@ -62,30 +62,26 @@ export default function Terminal() {
       return;
     }
 
-    if (cmd === "contact") {
-      setLines((prev) => [
-        ...prev,
-        { type: "output", text: "→ Navigating to /contact..." },
-      ]);
-      setTimeout(() => router.push("/contact"), 600);
-      return;
-    }
-
-    if (cmd === "projects") {
-      setLines((prev) => [
-        ...prev,
-        { type: "output", text: "→ Navigating to /projects..." },
-      ]);
-      setTimeout(() => router.push("/projects"), 600);
-      return;
-    }
-
+    const destinations: Record<string, string> = {
+      about: "/about",
+      skills: "/skills",
+      experience: "/experience",
+      education: "/about",
+      projects: "/projects",
+      contact: "/contact",
+    };
+    const destination = destinations[cmd];
     const result = commands[cmd];
     if (result) {
       const outputs = Array.isArray(result) ? result : [result];
       outputs.forEach((line) =>
         setLines((prev) => [...prev, { type: "output", text: line }])
       );
+    } else if (destination) {
+      setLines((prev) => [
+        ...prev,
+        { type: "output", text: `→ Opening ${destination}...` },
+      ]);
     } else {
       setLines((prev) => [
         ...prev,
@@ -95,6 +91,10 @@ export default function Terminal() {
         },
       ]);
     }
+
+    if (destination) {
+      window.setTimeout(() => router.push(destination), 300);
+    }
   };
 
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
@@ -103,11 +103,13 @@ export default function Terminal() {
       setInput("");
     }
     if (e.key === "ArrowUp") {
+      e.preventDefault();
       const idx = Math.min(historyIndex + 1, history.length - 1);
       setHistoryIndex(idx);
       setInput(history[idx] ?? "");
     }
     if (e.key === "ArrowDown") {
+      e.preventDefault();
       const idx = Math.max(historyIndex - 1, -1);
       setHistoryIndex(idx);
       setInput(idx === -1 ? "" : history[idx]);
@@ -126,15 +128,24 @@ export default function Terminal() {
           <span className="w-3 h-3 rounded-full bg-red-500" />
           <span className="w-3 h-3 rounded-full bg-yellow-500" />
           <span className="w-3 h-3 rounded-full bg-green-500" />
-          <span className="ml-auto text-zinc-500 text-xs">rohit.dev — bash</span>
+          <span className="ml-auto text-zinc-500 text-xs">
+            ROHIT.EXE / portfolio console
+          </span>
         </div>
 
         {/* Terminal body */}
-        <div className="bg-zinc-950 p-4 min-h-[320px] max-h-[480px] overflow-y-auto space-y-1 cursor-text">
+        <div
+          ref={outputRef}
+          className="bg-zinc-950 p-4 min-h-[220px] max-h-[420px] overflow-y-auto space-y-1 cursor-text sm:min-h-[280px]"
+          role="log"
+          aria-label="Portfolio terminal output"
+          aria-live="polite"
+          aria-relevant="additions text"
+        >
           {lines.map((line, i) => (
             <div
               key={i}
-              className={
+              className={`break-words ${
                 line.type === "input"
                   ? "text-emerald-400"
                   : line.type === "error"
@@ -142,7 +153,7 @@ export default function Terminal() {
                   : line.type === "boot"
                   ? "text-zinc-400"
                   : "text-zinc-200"
-              }
+              }`}
             >
               {line.text}
             </div>
@@ -157,7 +168,8 @@ export default function Terminal() {
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={handleKeyDown}
-                className="flex-1 bg-transparent outline-none text-emerald-400 caret-emerald-400"
+                aria-label="Enter a portfolio terminal command"
+                className="min-w-0 flex-1 bg-transparent outline-none text-emerald-400 caret-emerald-400 focus-visible:outline-2 focus-visible:outline-emerald-400"
                 spellCheck={false}
                 autoCapitalize="off"
                 autoCorrect="off"
@@ -165,13 +177,27 @@ export default function Terminal() {
             </div>
           )}
 
-          <div ref={bottomRef} />
         </div>
       </div>
 
       <p className="text-center text-zinc-600 text-xs mt-3">
-        ↑↓ history · Enter to run · try `help`
+        ↑↓ history · Enter to run · simulated commands only
       </p>
+      <div
+        className="mt-3 flex flex-wrap justify-center gap-2"
+        aria-label="Suggested terminal commands"
+      >
+        {commandSuggestions.map((command) => (
+          <button
+            key={command}
+            type="button"
+            onClick={() => handleCommand(command)}
+            className="min-h-9 rounded-md border border-zinc-800 px-2.5 font-mono text-[10px] text-zinc-400 hover:border-emerald-800 hover:text-emerald-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-400"
+          >
+            {command}
+          </button>
+        ))}
+      </div>
     </div>
   );
 }

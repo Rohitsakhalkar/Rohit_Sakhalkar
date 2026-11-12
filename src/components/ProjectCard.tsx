@@ -4,141 +4,159 @@ import { projects } from "@/lib/data";
 import { useState } from "react";
 import Link from "next/link";
 
-const allTags = ["All", ...Array.from(new Set(projects.flatMap((p) => p.tags)))];
+const filters = [
+  "All",
+  "Backend",
+  "Python",
+  "Automation",
+  "Fundamentals",
+] as const;
+type Project = (typeof projects)[number];
 
-export default function ProjectCard({ id }: { id?: string }) {
-  const [hovered, setHovered] = useState<string | null>(null);
-  const [filter, setFilter] = useState("All");
-
-  const filtered = filter === "All" ? projects : projects.filter((p) => p.tags.includes(filter));
-
-  if (id) {
-    // Single card mode
-    const p = projects.find((pr) => pr.id === id);
-    if (!p) return null;
-    return <Card project={p} hovered={hovered} setHovered={setHovered} />;
-  }
+export default function ProjectCard({
+  featuredOnly = false,
+}: {
+  featuredOnly?: boolean;
+}) {
+  const [filter, setFilter] = useState<(typeof filters)[number]>("All");
+  const visibleProjects = projects.filter(
+    (project) =>
+      (!featuredOnly || project.featured) &&
+      (filter === "All" ||
+        project.category === filter ||
+        project.tags.includes(filter))
+  );
 
   return (
-    <div className="space-y-6">
-      {/* Filter tabs */}
-      <div className="flex flex-wrap gap-2 font-mono text-xs">
-        {allTags.map((tag) => (
-          <button
-            key={tag}
-            onClick={() => setFilter(tag)}
-            className={`px-3 py-1 rounded border transition-colors ${
-              filter === tag
-                ? "border-emerald-500 text-emerald-400 bg-emerald-950"
-                : "border-zinc-700 text-zinc-500 hover:border-zinc-500 hover:text-zinc-300"
-            }`}
-          >
-            {tag}
-          </button>
-        ))}
-      </div>
+    <div className="space-y-5">
+      {!featuredOnly && (
+        <div
+          className="flex flex-wrap gap-2"
+          role="group"
+          aria-label="Filter projects"
+        >
+          {filters.map((item) => (
+            <button
+              key={item}
+              type="button"
+              onClick={() => setFilter(item)}
+              aria-pressed={filter === item}
+              className={`rounded-full border px-3 py-1.5 text-xs transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-400 ${
+                filter === item
+                  ? "border-emerald-500/60 bg-emerald-500/10 text-emerald-300"
+                  : "border-zinc-700 text-zinc-400 hover:border-zinc-500 hover:text-zinc-200"
+              }`}
+            >
+              {item}
+            </button>
+          ))}
+        </div>
+      )}
 
-      {/* Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {filtered.map((p) => (
-          <Card key={p.id} project={p} hovered={hovered} setHovered={setHovered} />
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+        {visibleProjects.map((project) => (
+          <ProjectTile key={project.id} project={project} />
         ))}
       </div>
     </div>
   );
 }
 
-function Card({
-  project: p,
-  hovered,
-  setHovered,
-}: {
-  project: (typeof projects)[0];
-  hovered: string | null;
-  setHovered: (id: string | null) => void;
-}) {
+function ProjectTile({ project }: { project: Project }) {
+  const artifactLabel =
+    project.id === "get_it_done"
+      ? "API / SOCIAL"
+      : project.id === "forge"
+        ? "PY / TOOLING"
+        : "DATA / TESTS";
+
   return (
-    <div
-      className="relative group border border-zinc-800 rounded-lg overflow-hidden bg-zinc-950 transition-all duration-300 hover:border-zinc-600"
-      onMouseEnter={() => setHovered(p.id)}
-      onMouseLeave={() => setHovered(null)}
-    >
-      {/* Default view */}
+    <article className="project-dossier flex h-full flex-col overflow-hidden rounded-xl border border-zinc-800 bg-[#101720] transition-colors hover:border-zinc-600">
       <div
-        className={`p-5 transition-opacity duration-200 ${
-          hovered === p.id ? "opacity-0" : "opacity-100"
-        }`}
+        className={`project-art project-art-${project.id} relative flex h-28 items-center justify-between overflow-hidden border-b border-zinc-800 px-5`}
+        aria-hidden="true"
       >
-        <div className="flex items-start justify-between mb-2">
-          <h3 className="font-mono font-bold text-zinc-100">{p.title}</h3>
-          {p.featured && (
-            <span className="text-xs text-emerald-500 font-mono border border-emerald-800 rounded px-1.5 py-0.5">
-              featured
-            </span>
-          )}
+        <span className="relative z-10 font-mono text-[10px] uppercase tracking-[0.18em] text-zinc-400">
+          {artifactLabel}
+        </span>
+        <span className="artifact-mark font-mono text-4xl font-semibold">
+          {project.id === "get_it_done"
+            ? "G"
+            : project.id === "forge"
+              ? "F"
+              : "DS"}
+        </span>
+      </div>
+
+      <div className="flex flex-1 flex-col p-5 sm:p-6">
+        <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
+          <span className="font-mono text-xs text-emerald-400">
+            {project.category}
+          </span>
+          <span className="rounded-full border border-zinc-700 px-2.5 py-1 text-xs text-zinc-300">
+            {project.status}
+          </span>
         </div>
-        <p className="text-zinc-400 text-sm mb-4 leading-relaxed">{p.description}</p>
-        <div className="flex flex-wrap gap-1.5 mb-4">
-          {p.tags.map((t) => (
+
+        <h3 className="text-lg font-semibold text-zinc-100">{project.title}</h3>
+        <p className="mt-2 text-sm leading-6 text-zinc-400">
+          {project.description}
+        </p>
+
+        <h4 className="mt-4 font-mono text-[10px] uppercase tracking-wider text-zinc-500">
+          Project focus
+        </h4>
+        <ul className="mt-2 space-y-1.5 text-sm text-zinc-300">
+          {project.focus.map((item) => (
+            <li key={item} className="flex gap-2">
+              <span aria-hidden="true" className="text-emerald-500">
+                →
+              </span>
+              <span>{item}</span>
+            </li>
+          ))}
+        </ul>
+
+        <div className="mt-5 flex flex-wrap gap-2">
+          {project.tags.map((tag) => (
             <span
-              key={t}
-              className="text-xs font-mono text-zinc-500 border border-zinc-800 rounded px-1.5 py-0.5"
+              key={tag}
+              className="rounded-md border border-zinc-800 px-2 py-1 font-mono text-[11px] text-zinc-400"
             >
-              {t}
+              {tag}
             </span>
           ))}
         </div>
-        <div className="flex gap-3 text-xs font-mono">
-          <Link
-            href={p.github}
-            target="_blank"
-            className="text-zinc-500 hover:text-zinc-200 transition-colors"
-          >
-            GitHub ↗
-          </Link>
-          {p.live && (
-            <Link
-              href={p.live}
-              target="_blank"
-              className="text-emerald-600 hover:text-emerald-400 transition-colors"
-            >
-              Live ↗
-            </Link>
-          )}
-        </div>
-      </div>
 
-      {/* Terminal hover overlay */}
-      <div
-        className={`absolute inset-0 bg-zinc-950 p-4 font-mono text-xs transition-opacity duration-200 ${
-          hovered === p.id ? "opacity-100" : "opacity-0 pointer-events-none"
-        }`}
-      >
-        <div className="text-zinc-500 mb-2 text-[10px]">▶ {p.title}</div>
-        {p.terminalPreview.map((line, i) => (
-          <div
-            key={i}
-            className={
-              line.startsWith("$")
-                ? "text-emerald-400"
-                : line.startsWith(">")
-                ? "text-zinc-300"
-                : "text-zinc-500"
-            }
-          >
-            {line}
+        <div className="mt-auto">
+          <div className="mt-5 flex flex-wrap gap-4 border-t border-zinc-800 pt-4 text-sm">
+            <Link
+              href={`/projects/${project.slug}`}
+              className="text-zinc-300 underline decoration-zinc-700 underline-offset-4 hover:text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emerald-400"
+            >
+              Open dossier
+            </Link>
+            <a
+              href={project.github}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-emerald-400 underline decoration-emerald-900 underline-offset-4 hover:text-emerald-300 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emerald-400"
+            >
+              GitHub <span aria-hidden="true">↗</span>
+            </a>
+            {project.live && (
+              <a
+                href={project.live}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-emerald-400 underline decoration-emerald-900 underline-offset-4 hover:text-emerald-300 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emerald-400"
+              >
+                Live demo <span aria-hidden="true">↗</span>
+              </a>
+            )}
           </div>
-        ))}
-        <div className="mt-3 pt-3 border-t border-zinc-800 flex gap-3">
-          <Link
-            href={p.github}
-            target="_blank"
-            className="text-zinc-500 hover:text-zinc-200 transition-colors"
-          >
-            GitHub ↗
-          </Link>
         </div>
       </div>
-    </div>
+    </article>
   );
 }
