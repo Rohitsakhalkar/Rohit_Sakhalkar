@@ -20,6 +20,25 @@ const jetBrainsMono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   title: "Rohit Sakhalkar — Developer",
+  description: "Portfolio of Rohit Sakhalkar, a developer focused on Python, automation, backend engineering, and practical software.",
+  icons: {
+    icon: "/favicon.png",
+    shortcut: "/favicon.png",
+    apple: "/favicon.png",
+  },
+  metadataBase: process.env.NEXT_PUBLIC_SITE_URL
+    ? new URL(process.env.NEXT_PUBLIC_SITE_URL)
+    : undefined,
+  openGraph: {
+    title: "Rohit Sakhalkar — Developer",
+    description: "Portfolio of Rohit Sakhalkar, a developer focused on Python, automation, backend engineering, and practical software.",
+    type: "website",
+  },
+  twitter: {
+    card: "summary",
+    title: "Rohit Sakhalkar — Developer",
+    description: "Portfolio of Rohit Sakhalkar, a developer focused on Python, automation, backend engineering, and practical software.",
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

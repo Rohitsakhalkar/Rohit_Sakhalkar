@@ -24,6 +24,7 @@ export default function DesignSystemPage() {
             label="Developer preview"
             title="Design system"
             description="A temporary view of the reusable visual foundations for the portfolio."
+            headingLevel="h1"
           />
           <StatusIndicator>Stage 2 / ready for inspection</StatusIndicator>
         </Container>
@@ -35,7 +36,7 @@ export default function DesignSystemPage() {
         <Container>
           <div className="preview-stack">
             <section aria-labelledby="typography-heading">
-              <SectionHeading label="Typography" title="A clear hierarchy." />
+              <SectionHeading label="Typography" title="A clear hierarchy." titleId="typography-heading" />
               <div className="preview-stack">
                 <div>
                   <p className="technical-label">Display heading</p>
@@ -58,7 +59,7 @@ export default function DesignSystemPage() {
             <Divider />
 
             <section aria-labelledby="colors-heading">
-              <SectionHeading label="Palette" title="Restrained contrast." />
+              <SectionHeading label="Palette" title="Restrained contrast." titleId="colors-heading" />
               <div className="preview-grid">
                 {colors.map(([name, value, background]) => (
                   <div
@@ -76,7 +77,7 @@ export default function DesignSystemPage() {
             <Divider />
 
             <section aria-labelledby="controls-heading">
-              <SectionHeading label="Controls" title="Quiet, useful actions." />
+              <SectionHeading label="Controls" title="Quiet, useful actions." titleId="controls-heading" />
               <div className="preview-grid">
                 <Surface padded>
                   <div className="preview-stack">
@@ -108,6 +109,7 @@ export default function DesignSystemPage() {
                 label="Layout primitives"
                 title="Surfaces and separators."
                 description="The same spacing, border, and surface rules can support future sections without introducing a card-heavy visual language."
+                titleId="surfaces-heading"
               />
               <Surface padded>
                 <div className="preview-stack">

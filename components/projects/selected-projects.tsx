@@ -1,54 +1,11 @@
 import { Button } from "../ui/button";
 import { Container } from "../ui/container";
 import { Section } from "../ui/section";
-
-function ForgeVisual() {
-  return (
-    <svg className="selected-project__visual" viewBox="0 0 520 300" role="img" aria-label="Modular automation toolkit diagram">
-      <path className="selected-project__line" d="M70 150h380M260 58v184" />
-      <circle className="selected-project__node selected-project__node--accent" cx="260" cy="150" r="14" />
-      <g className="selected-project__module">
-        <rect x="42" y="28" width="118" height="58" />
-        <text x="61" y="63">ENV</text>
-        <rect x="360" y="28" width="118" height="58" />
-        <text x="382" y="63">FILES</text>
-        <rect x="42" y="214" width="118" height="58" />
-        <text x="64" y="249">APPS</text>
-        <rect x="360" y="214" width="118" height="58" />
-        <text x="378" y="249">HISTORY</text>
-      </g>
-    </svg>
-  );
-}
-
-function DataStructuresVisual() {
-  return (
-    <svg className="selected-project__visual selected-project__visual--structures" viewBox="0 0 520 180" role="img" aria-label="Connected nodes representing data structures">
-      <path className="selected-project__line" d="M54 90h104l52-48h104l52 48h100M158 90l52 48h104l52-48" />
-      {[54, 158, 262, 366, 466].map((x) => (
-        <circle className="selected-project__node" cx={x} cy="90" r="13" key={`main-${x}`} />
-      ))}
-      {[210, 314].map((x) => (
-        <circle className="selected-project__node selected-project__node--accent" cx={x} cy="42" r="10" key={`top-${x}`} />
-      ))}
-      {[210, 314].map((x) => (
-        <circle className="selected-project__node" cx={x} cy="138" r="10" key={`bottom-${x}`} />
-      ))}
-    </svg>
-  );
-}
-
-function LearnableVisual() {
-  return (
-    <div className="learnable-visual" aria-label="Four accessibility experiences">
-      {['VOICE-ASSISTED', 'VISUAL', 'SIMPLIFIED', 'STANDARD'].map((mode, index) => (
-        <span className={`learnable-visual__mode learnable-visual__mode--${index + 1}`} key={mode}>
-          {mode}
-        </span>
-      ))}
-    </div>
-  );
-}
+import {
+  HomepageDataStructuresArtwork,
+  HomepageForgeArtwork,
+  HomepageLearnableArtwork,
+} from "./project-artwork";
 
 export function SelectedProjects() {
   return (
@@ -76,12 +33,12 @@ export function SelectedProjects() {
               <Button href="https://github.com/Rohitsakhalkar/forge" variant="secondary" target="_blank" rel="noreferrer">VIEW SOURCE</Button>
             </div>
           </div>
-          <div className="selected-project__art selected-project__art--forge"><ForgeVisual /></div>
+          <div className="selected-project__art selected-project__art--forge"><HomepageForgeArtwork /></div>
         </article>
 
         <div className="selected-projects__grid">
           <article className="selected-project selected-project--structures">
-            <div className="selected-project__art"><DataStructuresVisual /></div>
+            <div className="selected-project__art"><HomepageDataStructuresArtwork /></div>
             <div className="selected-project__copy">
               <p className="technical-label">FUNDAMENTALS / PYTHON</p>
               <h3>Data Structures</h3>
@@ -115,7 +72,7 @@ export function SelectedProjects() {
                 <Button href="https://github.com/Rohitsakhalkar/learnable" variant="secondary" target="_blank" rel="noreferrer">VIEW SOURCE</Button>
               </div>
             </div>
-            <div className="selected-project__art selected-project__art--learnable"><LearnableVisual /></div>
+            <div className="selected-project__art selected-project__art--learnable"><HomepageLearnableArtwork /></div>
           </article>
         </div>
       </Container>

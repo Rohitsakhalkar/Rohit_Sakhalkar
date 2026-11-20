@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Container } from "../ui/container";
 
 const navigationItems = [
@@ -14,9 +15,15 @@ const navigationItems = [
 
 const resumeHref = process.env.NEXT_PUBLIC_RESUME_URL ?? "/Rohit_Sakhalkar_Python_Developer_Resume.pdf";
 
-function isActivePath(pathname: string, href: string) {
+function isActivePath(pathname: string, hash: string, href: string) {
+  const [path, targetHash] = href.split("#");
+
+  if (targetHash) {
+    return pathname === path && hash === `#${targetHash}`;
+  }
+
   if (href === "/") {
-    return pathname === "/";
+    return pathname === "/" && hash === "";
   }
 
   return pathname === href || pathname.startsWith(`${href}/`);
@@ -25,21 +32,27 @@ function isActivePath(pathname: string, href: string) {
 export function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [pathname, setPathname] = useState("");
+  const [hash, setHash] = useState("");
+  const pathname = usePathname();
 
   useEffect(() => {
     const updateScrollState = () => setIsScrolled(window.scrollY > 12);
-    const updatePathname = () => setPathname(window.location.pathname);
 
     updateScrollState();
-    updatePathname();
     window.addEventListener("scroll", updateScrollState, { passive: true });
-    window.addEventListener("popstate", updatePathname);
 
     return () => {
       window.removeEventListener("scroll", updateScrollState);
-      window.removeEventListener("popstate", updatePathname);
     };
+  }, []);
+
+  useEffect(() => {
+    const updateHash = () => setHash(window.location.hash);
+
+    updateHash();
+    window.addEventListener("hashchange", updateHash);
+
+    return () => window.removeEventListener("hashchange", updateHash);
   }, []);
 
   useEffect(() => {
@@ -59,6 +72,10 @@ export function Navigation() {
   }, [isMenuOpen]);
 
   const closeMenu = () => setIsMenuOpen(false);
+  const updateActiveHash = (href: string) => {
+    const hashIndex = href.indexOf("#");
+    setHash(hashIndex === -1 ? "" : href.slice(hashIndex));
+  };
 
   return (
     <header className={`site-nav${isScrolled ? " site-nav--scrolled" : ""}`}>
@@ -70,7 +87,7 @@ export function Navigation() {
 
           <nav className="site-nav__desktop" aria-label="Primary navigation">
             {navigationItems.map((item) => {
-              const active = isActivePath(pathname, item.href);
+              const active = isActivePath(pathname, hash, item.href);
 
               return (
                 <Link
@@ -78,6 +95,10 @@ export function Navigation() {
                   href={item.href}
                   key={item.href}
                   aria-current={active ? "page" : undefined}
+                  onClick={() => {
+                    updateActiveHash(item.href);
+                    closeMenu();
+                  }}
                 >
                   {item.label}
                 </Link>
@@ -120,7 +141,7 @@ export function Navigation() {
           id="mobile-navigation"
         >
           {navigationItems.map((item) => {
-            const active = isActivePath(pathname, item.href);
+                const active = isActivePath(pathname, hash, item.href);
 
             return (
               <Link
@@ -129,7 +150,10 @@ export function Navigation() {
                 key={item.href}
                 tabIndex={isMenuOpen ? 0 : -1}
                 aria-current={active ? "page" : undefined}
-                onClick={closeMenu}
+                  onClick={() => {
+                    updateActiveHash(item.href);
+                    closeMenu();
+                  }}
               >
                 {item.label}
               </Link>

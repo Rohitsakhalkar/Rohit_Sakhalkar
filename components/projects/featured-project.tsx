@@ -2,6 +2,7 @@ import { Button } from "../ui/button";
 import { Container } from "../ui/container";
 import { Section } from "../ui/section";
 import { StatusIndicator } from "../ui/status-indicator";
+import { HomepageGetItDoneArtwork } from "./project-artwork";
 
 const engineeringHighlights = [
   {
@@ -26,43 +27,6 @@ const engineeringHighlights = [
   },
 ] as const;
 
-function ProjectRelationshipDiagram() {
-  return (
-    <div className="featured-project__diagram" aria-hidden="true">
-      <svg
-        className="featured-project__diagram-svg"
-        viewBox="0 0 620 470"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path d="M112 112H508M112 112V358M508 112V358M112 358H508" stroke="currentColor" strokeOpacity="0.45" />
-        <path d="M112 112L310 235L508 112M112 358L310 235L508 358" stroke="#FF784F" strokeOpacity="0.75" strokeWidth="2" />
-        <path d="M310 235V112M310 235V358" stroke="currentColor" strokeOpacity="0.35" />
-
-        <rect x="48" y="48" width="128" height="64" fill="#202020" stroke="currentColor" />
-        <rect x="246" y="203" width="128" height="64" fill="#202020" stroke="#FF784F" />
-        <rect x="444" y="48" width="128" height="64" fill="#202020" stroke="currentColor" />
-        <rect x="48" y="358" width="128" height="64" fill="#202020" stroke="currentColor" />
-        <rect x="444" y="358" width="128" height="64" fill="#202020" stroke="currentColor" />
-
-        <circle cx="112" cy="112" r="5" fill="#FF784F" />
-        <circle cx="310" cy="235" r="7" fill="#FF784F" />
-        <circle cx="508" cy="112" r="5" fill="#FF784F" />
-        <circle cx="112" cy="358" r="5" fill="#F1EFEA" />
-        <circle cx="508" cy="358" r="5" fill="#F1EFEA" />
-
-        <path d="M72 78H152M270 233H350M468 78H548M72 388H152M468 388H548" stroke="currentColor" strokeOpacity="0.65" />
-        <path d="M80 92H128M278 247H342M476 92H524M80 402H128M476 402H524" stroke="#FF784F" strokeOpacity="0.55" />
-      </svg>
-      <div className="featured-project__diagram-label featured-project__diagram-label--people">PEOPLE</div>
-      <div className="featured-project__diagram-label featured-project__diagram-label--skills">SKILLS</div>
-      <div className="featured-project__diagram-label featured-project__diagram-label--posts">POSTS</div>
-      <div className="featured-project__diagram-label featured-project__diagram-label--tasks">TASKS</div>
-      <div className="featured-project__diagram-label featured-project__diagram-label--core">CORE</div>
-    </div>
-  );
-}
-
 export function FeaturedProject() {
   return (
     <Section
@@ -84,7 +48,7 @@ export function FeaturedProject() {
             </p>
           </div>
 
-          <ProjectRelationshipDiagram />
+          <HomepageGetItDoneArtwork />
         </div>
 
         <div className="featured-project__body">

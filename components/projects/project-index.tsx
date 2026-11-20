@@ -2,7 +2,7 @@ import { projects } from "../../data/projects";
 import { Button } from "../ui/button";
 import { Container } from "../ui/container";
 import { Section } from "../ui/section";
-import { ProjectArtwork } from "./project-artwork";
+import { ProjectIndexArtwork } from "./project-artwork";
 
 export function ProjectIndex() {
   return (
@@ -31,7 +31,7 @@ export function ProjectIndex() {
                   <p className="technical-label project-row__stack">{project.stack}</p>
                   <Button href={`/projects/${project.slug}`} variant={project.slug === "get-it-done" ? "primary" : "secondary"}>VIEW CASE STUDY</Button>
                 </div>
-                <ProjectArtwork variant={project.visual} />
+                <ProjectIndexArtwork variant={project.visual} />
               </article>
             ))}
           </div>

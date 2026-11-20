@@ -3,14 +3,21 @@ import { Button } from "../ui/button";
 import { Container } from "../ui/container";
 import { Section } from "../ui/section";
 
-export function Contributions() {
+type ContributionsProps = {
+  standalone?: boolean;
+};
+
+export function Contributions({ standalone = false }: ContributionsProps) {
+  const Heading = standalone ? "h1" : "h2";
+  const ProjectHeading = standalone ? "h2" : "h3";
+
   return (
     <Section className="contributions" id="contributions" aria-labelledby="contributions-title">
       <Container wide>
         <div className="contributions__intro">
           <p className="technical-label">OPEN SOURCE</p>
           <div>
-            <h2 id="contributions-title">Outside My Repositories</h2>
+            <Heading id="contributions-title">Outside My Repositories</Heading>
             <p className="contributions__lead">
               I enjoy contributing beyond my own projects, exploring unfamiliar codebases, understanding existing engineering decisions, and submitting focused improvements.
             </p>
@@ -25,7 +32,7 @@ export function Contributions() {
                 <div className="contribution__header">
                   <div>
                     <p className="technical-label">{contribution.repository}</p>
-                    <h3>{contribution.project}</h3>
+                    <ProjectHeading>{contribution.project}</ProjectHeading>
                   </div>
                   <p className={`contribution__status contribution__status--${contribution.status.toLowerCase()}`}>
                     <span aria-hidden="true" />
