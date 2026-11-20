@@ -1,5 +1,12 @@
-import { ProjectPlaceholder } from "../../../components/projects/project-placeholder";
+import type { Metadata } from "next";
+import { ProjectCaseStudy } from "../../../components/projects/project-case-study";
+import { projects } from "../../../data/projects";
+
+export const metadata: Metadata = {
+  title: "Forge | Rohit Sakhalkar",
+  description: "A Python CLI toolkit for development and everyday system operations.",
+};
 
 export default function ForgePage() {
-  return <ProjectPlaceholder label="PROJECT / FORGE" title="Forge" status="COMPLETED · V1" />;
+  return <ProjectCaseStudy project={projects[1]} />;
 }

@@ -1,14 +1,12 @@
-import { Container } from "../../../components/ui/container";
+import type { Metadata } from "next";
+import { ProjectCaseStudy } from "../../../components/projects/project-case-study";
+import { projects } from "../../../data/projects";
+
+export const metadata: Metadata = {
+  title: "Get It Done | Rohit Sakhalkar",
+  description: "A backend-first platform concept connecting people through local opportunities, skills, and small tasks.",
+};
 
 export default function GetItDonePage() {
-  return (
-    <main className="project-placeholder">
-      <Container narrow>
-        <p className="technical-label">PROJECT / GET IT DONE</p>
-        <h1>Get It Done</h1>
-        <p>IN DEVELOPMENT</p>
-        <p>The full project case study will be added in a later phase.</p>
-      </Container>
-    </main>
-  );
+  return <ProjectCaseStudy project={projects[0]} />;
 }
