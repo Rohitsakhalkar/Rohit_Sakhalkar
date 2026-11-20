@@ -8,11 +8,11 @@ const navigationItems = [
   { label: "HOME", href: "/" },
   { label: "PROJECTS", href: "/projects" },
   { label: "CONTRIBUTIONS", href: "/contributions" },
-  { label: "ABOUT", href: "/about" },
-  { label: "CONTACT", href: "/contact" },
+  { label: "ABOUT", href: "/#about" },
+  { label: "CONTACT", href: "/#contact" },
 ] as const;
 
-const resumeHref = process.env.NEXT_PUBLIC_RESUME_URL;
+const resumeHref = process.env.NEXT_PUBLIC_RESUME_URL ?? "/Rohit_Sakhalkar_Python_Developer_Resume.pdf";
 
 function isActivePath(pathname: string, href: string) {
   if (href === "/") {
