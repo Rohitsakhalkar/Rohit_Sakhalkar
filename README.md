@@ -10,7 +10,6 @@ automation, backend engineering, practical software, and open-source work.
 - Project archive at `/projects`.
 - Case studies for Get It Done, Forge, Data Structures, and LearnAble.
 - Open-source contributions at `/contributions`.
-- Temporary design-system preview at `/design-system`.
 
 ## Tech stack
 

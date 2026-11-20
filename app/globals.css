@@ -403,40 +403,20 @@ body {
   text-transform: uppercase;
 }
 
-.section-heading__title,
-.type-display,
-.type-section {
+.section-heading__title {
   margin: 0;
   font-family: var(--font-space-grotesk), sans-serif;
   font-weight: 500;
   line-height: var(--line-height-tight);
   letter-spacing: -0.04em;
-}
-
-.section-heading__title,
-.type-section {
   font-size: var(--font-size-section);
 }
 
-.type-display {
-  font-size: var(--font-size-display);
-}
-
-.type-body,
-.type-lead,
-.type-small {
+.type-lead {
   margin: 0;
   color: var(--color-secondary);
-}
-
-.type-lead {
   font-size: var(--font-size-lead);
   line-height: var(--line-height-relaxed);
-}
-
-.type-small {
-  font-size: var(--font-size-small);
-  line-height: var(--line-height-body);
 }
 
 .button {
@@ -541,46 +521,6 @@ body {
   content: "";
 }
 
-.preview-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--space-5);
-}
-
-.color-swatch {
-  display: grid;
-  min-height: 7rem;
-  align-content: end;
-  gap: var(--space-1);
-  padding: var(--space-3);
-  border: 1px solid var(--color-border);
-  color: var(--color-primary);
-}
-
-.color-swatch__name,
-.color-swatch__value {
-  margin: 0;
-  font-family: var(--font-jetbrains-mono), monospace;
-  font-size: var(--font-size-label);
-  line-height: 1.4;
-}
-
-.color-swatch__value {
-  color: inherit;
-  opacity: 0.72;
-}
-
-.preview-stack {
-  display: grid;
-  gap: var(--space-7);
-}
-
-@media (min-width: 48rem) {
-  .preview-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-}
-
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -596,50 +536,6 @@ body {
   .button {
     width: 100%;
   }
-
-  .preview-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-.foundation-page {
-  display: grid;
-  min-height: 100svh;
-  place-items: center;
-  padding: var(--page-gutter);
-}
-
-.foundation-panel {
-  width: min(100%, var(--container-narrow));
-  padding: clamp(1.5rem, 5vw, 3rem);
-  border: 1px solid var(--color-border);
-  background: var(--color-surface);
-}
-
-.eyebrow {
-  margin: 0 0 var(--space-5);
-  color: var(--color-accent);
-  font-family: var(--font-jetbrains-mono), monospace;
-  font-size: var(--font-size-label);
-  letter-spacing: 0.08em;
-  line-height: 1.4;
-  text-transform: uppercase;
-}
-
-.foundation-panel h1 {
-  margin: 0;
-  font-family: var(--font-space-grotesk), sans-serif;
-  font-size: clamp(2rem, 8vw, 4rem);
-  line-height: var(--line-height-tight);
-  letter-spacing: -0.04em;
-}
-
-.foundation-copy {
-  max-width: 32rem;
-  margin: var(--space-5) 0 0;
-  color: var(--color-secondary);
-  font-size: var(--font-size-body);
-  line-height: var(--line-height-body);
 }
 
 .currently-building {
