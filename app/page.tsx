@@ -1,6 +1,7 @@
 import { CurrentlyBuilding } from "../components/home/currently-building";
 import { Hero } from "../components/hero/hero";
 import { FeaturedProject } from "../components/projects/featured-project";
+import { SelectedProjects } from "../components/projects/selected-projects";
 
 export default function Home() {
   return (
@@ -8,6 +9,7 @@ export default function Home() {
       <Hero />
       <CurrentlyBuilding />
       <FeaturedProject />
+      <SelectedProjects />
     </main>
   );
 }
