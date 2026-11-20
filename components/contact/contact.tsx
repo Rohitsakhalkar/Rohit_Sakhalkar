@@ -1,9 +1,15 @@
 import { Container } from "../ui/container";
 import { StatusIndicator } from "../ui/status-indicator";
 
-const contactLinks = [
-  { label: "EMAIL", href: null, detail: "ADDRESS NOT PROVIDED" },
-  { label: "LINKEDIN", href: null, detail: "PROFILE NOT PROVIDED" },
+type ContactLink = {
+  label: string;
+  href: string | null;
+  detail: string;
+};
+
+const contactLinks: ContactLink[] = [
+  { label: "EMAIL", href: "mailto:rohitsakhalkar3@gmail.com", detail: "ROHITSAKHALKAR3@GMAIL.COM" },
+  { label: "LINKEDIN", href: "https://www.linkedin.com/in/rohitsakhalkar9347/", detail: "LINKEDIN.COM/IN/ROHITSAKHALKAR9347" },
   { label: "GITHUB", href: "https://github.com/Rohitsakhalkar", detail: "GITHUB.COM/ROHITSAKHALKAR" },
   { label: "RESUME", href: "/Rohit_Sakhalkar_Python_Developer_Resume.pdf", detail: "PDF" },
 ] as const;

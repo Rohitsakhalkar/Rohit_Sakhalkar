@@ -24,8 +24,8 @@ export function Footer() {
           </nav>
           <nav aria-label="Footer social links" className="site-footer__social">
             <a href="https://github.com/Rohitsakhalkar" target="_blank" rel="noreferrer">GITHUB</a>
-            <span className="site-footer__unavailable" title="LinkedIn profile not provided">LINKEDIN</span>
-            <span className="site-footer__unavailable" title="Email address not provided">EMAIL</span>
+            <a href="https://www.linkedin.com/in/rohitsakhalkar9347/" target="_blank" rel="noreferrer">LINKEDIN</a>
+            <a href="mailto:rohitsakhalkar3@gmail.com">EMAIL</a>
           </nav>
         </div>
 
